@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+{% load mathfilters %}
+
+{% block videoData %}
+
+<div class="row g-4 py-1 row-cols-1 row-cols-lg-2">
+
+    <div class="col p-5 py-1">
+        <div class="card shadow-lg mx-4">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ data.thumbnail }}" alt="thumbnail">
+
+          <div class="card-body">
+            <p class="card-text fw-bold">{{ data.title }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">views :  {{ data.views }}</small>  
+              <small class="text-muted">duration :  {{ data.duration | div:60 | floatformat:"2" }} mins</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    <div class="p-5 py-1 mb-4 bg-light rounded-3">
+        <div class="download-type my-4">
+            <h3>Download Video with Sound</h3>
+        </div>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Quality</th>
+                    <th scope="col">Format</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Downloads</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stream in data.progressiveStreams %}
+                    <tr>
+                        <td scope="row">{{ stream.resolution }}</td>
+                        <td>{{ stream.subtype }}</td>
+                        <td>{{ stream.filesize|div:1000000 | floatformat:"1" }} MB</td>
+                        <td><a class="btn btn-primary" href="{{ stream.url }}" role="button">Download</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="download-type my-4">
+            <h3>Download Sound without Video</h3>
+        </div>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Quality</th>
+                    <th scope="col">Format</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Downloads</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stream in data.audioStreams %}
+                    <tr>
+                        <td scope="row">{{ stream.abr }}</td>
+                        <td>{{ stream.subtype }}</td>
+                        <td>{{ stream.filesize|div:1000000 | floatformat:"1" }} MB</td>
+                        <td><a class="btn btn-primary" href="{{ stream.url }}" role="button">Download</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock videoData %}
